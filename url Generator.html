@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Windows Shortcut Generator</title>
+    <!-- Google FontsからYomogiフォントを読み込む -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Yomogi&display=swap" rel="stylesheet">
+    
+    <style>
+        * {
+            font-family: "Yomogi", cursive, sans-serif;
+            box-sizing: border-box;
+        }
+        body {
+            background-color: #f0f7fa;
+            color: #4a5568;
+            max-width: 500px;
+            margin: 20px auto;
+            padding: 20px;
+            padding-bottom: 230px;
+            overflow-x: hidden;
+        }
+
+        /* --- 垂れ幕風に上から順に流れてくるアニメーション設定 --- */
+        @keyframes dropDown {
+            0% {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* 各要素に順番にアニメーションを適用 */
+        h1 {
+            text-align: center;
+            font-size: 2rem;
+            margin-bottom: 8px; 
+            color: #5c7c8a;
+            animation: dropDown 0.8s ease-out forwards;
+        }
+        .credit {
+            text-align: center;
+            font-size: 0.9rem;
+            color: #89b4c4;
+            margin-bottom: 30px;
+            opacity: 0;
+            animation: dropDown 0.8s ease-out 0.2s forwards;
+        }
+        .form-group:nth-of-type(1) {
+            opacity: 0;
+            animation: dropDown 0.8s ease-out 0.4s forwards;
+        }
+        .form-group:nth-of-type(2) {
+            opacity: 0;
+            animation: dropDown 0.8s ease-out 0.6s forwards;
+        }
+        #generateBtnContainer {
+            opacity: 0;
+            animation: dropDown 0.8s ease-out 0.8s forwards;
+        }
+
+        /* フォームの基本スタイル */
+        .form-group {
+            margin-bottom: 24px;
+        }
+        label {
+            display: block;
+            margin-bottom: 10px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #5c7c8a;
+        }
+        input[type="text"] {
+            width: 100%;
+            padding: 14px;
+            font-size: 1.1rem;
+            background: #ffffff;
+            border: 2px solid #d1e8ed;
+            color: #333333;
+            border-radius: 12px;
+        }
+        input[type="text"]:focus {
+            outline: none;
+            border-color: #93c5dc;
+        }
+        .input-with-button {
+            display: flex;
+            gap: 10px;
+        }
+        .input-with-button input {
+            flex: 1;
+        }
+        .action-btn {
+            background: #89b4c4;
+            color: white;
+            border: none;
+            padding: 0 20px;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+        .action-btn:active {
+            background: #6d96a6;
+        }
+        .clear-btn {
+            background: #aab8c2;
+            color: white;
+            border: none;
+            padding: 0 20px;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+        .clear-btn:active {
+            background: #8e9ea9;
+        }
+
+        /* ボタンとメッセージのコンテナ */
+        #generateBtnContainer {
+            margin-top: 15px;
+            text-align: center;
+        }
+
+        #generateBtn {
+            width: 100%;
+            background: #739bb0;
+            color: white;
+            border: none;
+            padding: 16px;
+            font-size: 1.3rem;
+            border-radius: 12px;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(115, 155, 176, 0.2);
+        }
+        #generateBtn:active {
+            background: #597f93;
+            box-shadow: none;
+            transform: translateY(1px);
+        }
+
+        /* --- ダウンロード開始メッセージのスタイル（大きく目立つように改良） --- */
+        #downloadMessage {
+            margin-top: 15px;
+            font-size: 1.4rem;
+            font-weight: bold;
+            color: #ff7b90; /* ぱっと目を引くかわいいピンク・赤みのある色 */
+            text-shadow: 0 2px 4px rgba(255, 123, 144, 0.2);
+            min-height: 2rem;
+            opacity: 0;
+            transform: scale(0.9);
+            transition: opacity 0.4s ease-in-out, transform 0.4s ease-in-out;
+        }
+
+        #downloadMessage.show {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        /* --- GIF画像のスタイル --- */
+        .gif-container {
+            margin-top: 12px;
+            text-align: center;
+        }
+        .gif-container img {
+            width: 100%;
+            height: auto;
+            object-fit: cover;
+            border-radius: 12px;
+        }
+
+        /* --- 歩く「るく」ちゃんのアニメーション --- */
+        .walking-character {
+            position: fixed;
+            bottom: 10px;
+            left: -220px;
+            z-index: 1000;
+            user-select: none;
+            animation: walk-and-bounce 16s linear infinite;
+        }
+
+        .character-icon {
+            display: inline-block;
+            animation: bounce 0.4s ease-in-out infinite alternate;
+        }
+
+        .character-icon img {
+            width: 200px;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 50%;
+            border: 4px solid #ffffff;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+        }
+
+        @keyframes walk-and-bounce {
+            0% {
+                left: -220px;
+                transform: scaleX(1);
+            }
+            49% {
+                transform: scaleX(1);
+            }
+            50% {
+                left: calc(100vw - 220px);
+                transform: scaleX(1);
+            }
+            52% {
+                left: calc(100vw - 220px);
+                transform: scaleX(-1);
+            }
+            99% {
+                transform: scaleX(-1);
+            }
+            100% {
+                left: -220px;
+                transform: scaleX(-1);
+            }
+        }
+
+        @keyframes bounce {
+            0% {
+                transform: translateY(0);
+            }
+            100% {
+                transform: translateY(-15px);
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 画面下を歩く「るく」ちゃん -->
+    <div class="walking-character">
+        <div class="character-icon">
+            <img src="ruku.jpg" alt="るく">
+        </div>
+    </div>
+
+    <h1>Shortcut Maker</h1>
+    <div class="credit">made by ruku</div>
+    
+    <div class="form-group">
+        <label for="shortcutName">ショートカット名（空欄でもOK）</label>
+        <div class="input-with-button">
+            <input type="text" id="shortcutName" placeholder="例: MyBlog (空欄ならURLから自動取得)">
+            <button type="button" class="clear-btn" id="clearNameBtn">クリア</button>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label for="targetPath">リンク先パス (URLなど)</label>
+        <div class="input-with-button">
+            <input type="text" id="targetPath" placeholder="例: https://github.com">
+            <button type="button" class="action-btn" id="pasteBtn">貼付</button>
+        </div>
+    </div>
+
+    <!-- ボタンとメッセージ、GIFをまとめるコンテナ -->
+    <div id="generateBtnContainer">
+        <button id="generateBtn">.urlファイルをダウンロード</button>
+        
+        <!-- GIFの上にメッセージが来るように配置を入れ替えました -->
+        <div id="downloadMessage">✨ ダウンロードを開始しました！ ✨</div>
+        
+        <div class="gif-container">
+            <img src="https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExbmY5MHltMjkxdTF4NGZycWpvenhwcDdpOG56bmZzMmNrNGgya3BpaCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/bG57Z38LoAOSFJIj4e/giphy.gif" alt="Decoration GIF">
+        </div>
+    </div>
+
+    <script>
+        function showDownloadMessage() {
+            const messageElement = document.getElementById('downloadMessage');
+            messageElement.classList.add('show');
+
+            setTimeout(() => {
+                messageElement.classList.remove('show');
+            }, 3000);
+        }
+
+        document.getElementById('pasteBtn').addEventListener('click', async () => {
+            try {
+                const text = await navigator.clipboard.readText();
+                document.getElementById('targetPath').value = text;
+            } catch (err) {
+                alert('クリップボードの読み取りが許可されていないか、対応していないブラウザです。');
+            }
+        });
+
+        document.getElementById('clearNameBtn').addEventListener('click', () => {
+            document.getElementById('shortcutName').value = '';
+            document.getElementById('shortcutName').focus();
+        });
+
+        document.getElementById('generateBtn').addEventListener('click', () => {
+            const target = document.getElementById('targetPath').value.trim();
+
+            if (!target) {
+                alert('リンク先パスを入力してください。');
+                return;
+            }
+
+            let name = document.getElementById('shortcutName').value.trim();
+
+            if (!name) {
+                try {
+                    let urlObj;
+                    if (target.startsWith('http://') || target.startsWith('https://')) {
+                        urlObj = new URL(target);
+                    } else {
+                        urlObj = new URL('https://' + target);
+                    }
+                    name = urlObj.hostname;
+                } catch (e) {
+                    name = target.replace(/[/\\?%*:|"<>]/g, '_');
+                }
+            }
+
+            const confirmMessage = `「${name}.url」\nというファイル名でダウンロードを開始します。\n\nよろしいですか？`;
+            const confirmed = window.confirm(confirmMessage);
+            
+            if (!confirmed) {
+                return;
+            }
+
+            const content = `[InternetShortcut]\nURL=${target}\n`;
+            const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
+            const url = URL.createObjectURL(blob);
+
+            const downloadLink = document.createElement('a');
+            downloadLink.href = url;
+            downloadLink.download = `${name}.url`;
+            document.body.appendChild(downloadLink);
+            downloadLink.click();
+
+            document.body.removeChild(downloadLink);
+            URL.revokeObjectURL(url);
+
+            showDownloadMessage();
+
+            document.getElementById('shortcutName').value = '';
+            document.getElementById('targetPath').value = '';
+            document.getElementById('targetPath').focus();
+        });
+    </script>
+
+</body>
+</html>
