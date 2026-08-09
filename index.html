@@ -146,12 +146,12 @@
             transform: translateY(1px);
         }
 
-        /* --- ダウンロード開始メッセージのスタイル（大きく目立つように改良） --- */
+        /* --- ダウンロード開始メッセージのスタイル --- */
         #downloadMessage {
             margin-top: 15px;
             font-size: 1.4rem;
             font-weight: bold;
-            color: #ff7b90; /* ぱっと目を引くかわいいピンク・赤みのある色 */
+            color: #ff7b90;
             text-shadow: 0 2px 4px rgba(255, 123, 144, 0.2);
             min-height: 2rem;
             opacity: 0;
@@ -176,11 +176,11 @@
             border-radius: 12px;
         }
 
-        /* --- 歩く「るく」ちゃんのアニメーション --- */
+        /* --- 歩く「るく」ちゃんのアニメーション（アイコンを42pxに変更） --- */
         .walking-character {
             position: fixed;
             bottom: 10px;
-            left: -220px;
+            left: -70px;
             z-index: 1000;
             user-select: none;
             animation: walk-and-bounce 16s linear infinite;
@@ -192,35 +192,35 @@
         }
 
         .character-icon img {
-            width: 200px;
-            height: 200px;
+            width: 42px;
+            height: 42px;
             object-fit: cover;
             border-radius: 50%;
-            border: 4px solid #ffffff;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+            border: 2px solid #ffffff;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.15);
         }
 
         @keyframes walk-and-bounce {
             0% {
-                left: -220px;
+                left: -70px;
                 transform: scaleX(1);
             }
             49% {
                 transform: scaleX(1);
             }
             50% {
-                left: calc(100vw - 220px);
+                left: calc(100vw - 70px);
                 transform: scaleX(1);
             }
             52% {
-                left: calc(100vw - 220px);
+                left: calc(100vw - 70px);
                 transform: scaleX(-1);
             }
             99% {
                 transform: scaleX(-1);
             }
             100% {
-                left: -220px;
+                left: -70px;
                 transform: scaleX(-1);
             }
         }
@@ -230,7 +230,7 @@
                 transform: translateY(0);
             }
             100% {
-                transform: translateY(-15px);
+                transform: translateY(-8px);
             }
         }
     </style>
@@ -267,7 +267,6 @@
     <div id="generateBtnContainer">
         <button id="generateBtn">.urlファイルをダウンロード</button>
         
-        <!-- GIFの上にメッセージが来るように配置を入れ替えました -->
         <div id="downloadMessage">✨ ダウンロードを開始しました！ ✨</div>
         
         <div class="gif-container">
