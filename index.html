@@ -9,6 +9,16 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Yomogi&display=swap" rel="stylesheet">
     
+    <!-- Google Analytics (GA4) のコード -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-XXXXXXXXXX');
+    </script>
+    
     <style>
         * {
             font-family: "Yomogi", cursive, sans-serif;
@@ -53,7 +63,7 @@
             animation: dropDown 0.8s ease-out 0.2s forwards;
         }
 
-        /* --- ホームに戻るリンクとカウンターのスタイル --- */
+        /* --- ホームに戻るリンクのスタイル --- */
         .footer-links {
             text-align: center;
             margin-top: 30px;
@@ -77,18 +87,6 @@
         .home-link:hover {
             background: #e6f2f5;
             color: #3b525d;
-        }
-
-        /* アクセスカウンターのスタイル（レトロ風） */
-        .hit-counter {
-            font-size: 0.95rem;
-            color: #89b4c4;
-            letter-spacing: 1px;
-        }
-        .hit-counter img {
-            vertical-align: middle;
-            height: 20px;
-            margin-left: 5px;
         }
 
         .form-group:nth-of-type(1) {
@@ -311,12 +309,9 @@
             <img src="https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExbmY5MHltMjkxdTF4NGZycWpvenhwcDdpOG56bmZzMmNrNGgya3BpaCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/bG57Z38LoAOSFJIj4e/giphy.gif" alt="Decoration GIF">
         </div>
 
-        <!-- ホームに戻るリンクとアクセスカウンターを追加 -->
+        <!-- ホームに戻るリンク -->
         <div class="footer-links">
             <a href="https://sites.google.com/view/ruku-homepage/%E3%82%8B%E3%81%8F%E3%81%AE%E3%83%9B%E3%83%BC%E3%83%A0%E3%83%9A%E3%83%BC%E3%82%B8" class="home-link">🏠 ホームに戻る</a>
-            <div class="hit-counter">
-                あなたは <img src="https://counter.fc2.com/counter.php?id=43759365" alt="counter" style="border:0;"> 人目の訪問者です
-            </div>
         </div>
     </div>
 
