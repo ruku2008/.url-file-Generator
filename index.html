@@ -363,7 +363,7 @@
                 }
             }
 
-            const confirmMessage = `I${name}.url\nというファイル名でダウンロードを開始します。\n\nよろしいですか？`;
+            const confirmMessage = `「${name}.url」\nというファイル名でダウンロードを開始します。\n\nよろしいですか？`;
             const confirmed = window.confirm(confirmMessage);
             
             if (!confirmed) {
@@ -371,7 +371,8 @@
             }
 
             const content = `[InternetShortcut]\nURL=${target}\n`;
-            const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
+            // Android等で勝手に .txt が付くのを防ぐため、MIMEタイプを application/octet-stream（一般的なバイナリファイル）に変更
+            const blob = new Blob([content], { type: 'application/octet-stream;charset=utf-8' });
             const url = URL.createObjectURL(blob);
 
             const downloadLink = document.createElement('a');
