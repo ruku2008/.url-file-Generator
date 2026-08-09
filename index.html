@@ -370,8 +370,8 @@
                 return;
             }
 
-            const content = `[InternetShortcut]\nURL=${target}\n`;
-            // Android等で勝手に .txt が付くのを防ぐため、MIMEタイプを application/octet-stream（一般的なバイナリファイル）に変更
+            // スマホでも正しく認識されるフルフォーマットに修正
+            const content = `[{000214A0-0000-0000-C000-000000000046}]\nProp3=19,11\n[InternetShortcut]\nIDList=\nURL=${target}\n`;
             const blob = new Blob([content], { type: 'application/octet-stream;charset=utf-8' });
             const url = URL.createObjectURL(blob);
 
