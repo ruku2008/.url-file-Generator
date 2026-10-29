@@ -183,6 +183,64 @@
             transform: translateY(1px);
         }
 
+        /* --- 広告枠 --- */
+        .ad-container {
+            margin-top: 16px;
+            text-align: center;
+        }
+        .ad-label {
+            margin: 0 0 6px;
+            color: #89b4c4;
+            font-size: 0.8rem;
+        }
+        .ad-slot {
+            display: flex;
+            min-height: 100px;
+            align-items: center;
+            justify-content: center;
+            padding: 12px;
+            background: #ffffff;
+            border: 1px dashed #d1e8ed;
+            border-radius: 12px;
+            color: #89b4c4;
+            font-size: 0.9rem;
+        }
+        .sticky-ad {
+            position: fixed;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            z-index: 1001;
+            display: flex;
+            justify-content: center;
+            padding: 4px 8px 8px;
+            background: rgba(255, 255, 255, 0.96);
+            border-top: 1px solid #d1e8ed;
+            box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.1);
+        }
+        .sticky-ad[hidden] {
+            display: none;
+        }
+        .sticky-ad-inner {
+            width: 320px;
+            max-width: 100%;
+            text-align: center;
+        }
+        .sticky-ad .ad-label {
+            margin-bottom: 2px;
+        }
+        .sticky-ad-slot {
+            min-height: 50px;
+        }
+        .small-ad-container {
+            max-width: 320px;
+            margin: 8px auto 0;
+            text-align: center;
+        }
+        .small-ad-slot {
+            min-height: 50px;
+        }
+
         /* --- ダウンロード開始メッセージのスタイル --- */
         #downloadMessage {
             margin-top: 15px;
@@ -302,6 +360,24 @@
 
     <div id="generateBtnContainer">
         <button id="generateBtn">.urlファイルをダウンロード</button>
+
+        <div class="ad-container" aria-label="広告">
+            <p class="ad-label">広告</p>
+            <div class="ad-slot">
+                <!-- admax -->
+                <script src="https://adm.shinobi.jp/s/2a730c706365a543c642efafc3ce0578"></script>
+                <!-- admax -->
+            </div>
+        </div>
+
+        <div class="small-ad-container" aria-label="広告">
+            <p class="ad-label">広告</p>
+            <div class="small-ad-slot">
+                <!-- admax -->
+                <script src="https://adm.shinobi.jp/s/7c8516184aa5027d443c61f97eee40e8"></script>
+                <!-- admax -->
+            </div>
+        </div>
         
         <div id="downloadMessage">✨ ダウンロードを開始しました！ ✨</div>
         
@@ -314,7 +390,29 @@
         </div>
     </div>
 
+    <div id="stickyAd" class="sticky-ad" aria-label="広告" hidden>
+        <div class="sticky-ad-inner">
+            <p class="ad-label">広告</p>
+            <div id="stickyAdSlot" class="sticky-ad-slot"></div>
+        </div>
+    </div>
+
     <script>
+        let stickyAdLoaded = false;
+
+        function showStickyAd() {
+            document.getElementById('stickyAd').hidden = false;
+
+            if (stickyAdLoaded) {
+                return;
+            }
+
+            const adScript = document.createElement('script');
+            adScript.src = 'https://adm.shinobi.jp/s/3826c11187fbe68187571e847f61d6da';
+            document.getElementById('stickyAdSlot').appendChild(adScript);
+            stickyAdLoaded = true;
+        }
+
         function showDownloadMessage() {
             const messageElement = document.getElementById('downloadMessage');
             messageElement.classList.add('show');
@@ -368,6 +466,8 @@
             if (!confirmed) {
                 return;
             }
+
+            showStickyAd();
 
             // スマホでも正しく認識されるフルフォーマットに修正
             const content = `[{000214A0-0000-0000-C000-000000000046}]\nProp3=19,11\n[InternetShortcut]\nIDList=\nURL=${target}\n`;
